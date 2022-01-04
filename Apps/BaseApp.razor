@@ -1,0 +1,59 @@
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.Rendering;
+@using Microsoft.AspNetCore.Components.Web;
+
+@namespace Blazr
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <h2 class="navbar-brand">Blazor Simple App</h2>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class=" btn nav-link" @onclick='() => this.ChangeRootComponent("Index")'>Index</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn nav-link" @onclick='() => this.ChangeRootComponent("Counter")'>Counter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn nav-link" @onclick='() => this.ChangeRootComponent("Hello")'>Hello</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn nav-link " @onclick="this.GoServerIndex">Server Home</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="ms-5">
+    @body
+</div>
+@code {
+    [Inject] private NavigationManager? NavManager { get; set; }
+
+    private Dictionary<string, Type> Routes => new Dictionary<string, Type> {
+        {"Index", typeof(Blazr.Index)},
+        {"Counter", typeof(Blazr.Counter)},
+        {"Hello", typeof(Blazr.Hello)}
+    };
+
+    private Type rootComponent = typeof(Blazr.Index);
+
+    private RenderFragment body => (RenderTreeBuilder builder) =>
+    {
+        builder.OpenComponent(0, rootComponent);
+        builder.CloseComponent();
+    };
+
+    public void ChangeRootComponent(string route)
+    {
+        if (Routes.ContainsKey(route))
+        {
+            rootComponent = Routes[route];
+            StateHasChanged();
+        }
+    }
+
+    public void GoServerIndex()
+    => this.NavManager?.NavigateTo("/Index", true);
+}

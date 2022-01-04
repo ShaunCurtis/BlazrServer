@@ -1,0 +1,11 @@
+@page
+@{
+    ViewData["Title"] = "Component page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome To my Component Page</h1>
+    @(await Html.RenderComponentAsync<Blazr.HelloBlazor>(RenderMode.ServerPrerendered, new { Message = "Hello there!" }))
+
+    <script src="_framework/blazor.server.js"></script>
+</div>

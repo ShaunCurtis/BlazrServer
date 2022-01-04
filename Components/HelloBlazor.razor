@@ -1,0 +1,25 @@
+@inherits ComponentBase
+@using Microsoft.AspNetCore.Components.Web
+@namespace Blazr
+
+<div>
+    <h1>Hello Blazor at @(time.ToLongTimeString())</h1>
+    <div class="m-3">
+        Todays Message is : @Message
+    </div>
+    <div class="m-3">
+        <button class="btn btn-primary" @onclick="GetTime">Set Time</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Message {get; set;} = string.Empty;
+
+    private DateTime time = DateTime.Now;
+
+    protected override void OnInitialized() 
+        =>  time = DateTime.Now;
+
+    private void GetTime() 
+        => time = DateTime.Now;
+}
